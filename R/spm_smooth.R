@@ -155,9 +155,8 @@ join_datasets <- function(sspm_dataset, sspm_boundary) {
   the_data <- spm_data(sspm_dataset)
   the_patches <- spm_patches(sspm_boundary)
 
-  # TODO REVIEW THE COHERENCE OF ST_TRANSFORM
   joined <- suppressMessages(sf::st_transform(the_data, crs = sf::st_crs(the_patches)))
-  # TODO joining patches to points but should be the opposite, keeping for rep for now
+  # TODO joining patches to points
   joined <- suppressMessages(sf::st_join(the_patches, the_data,
                                          suffix	= c("", "_dup"))) %>%
     dplyr::filter(!duplicated(.data[[spm_unique_ID(sspm_dataset)]])) %>%
@@ -203,7 +202,7 @@ join_smoothed_datasets <- function(sspm_object, preds_df){
   smoothed_data <-
     smoothed_data %>%
     dplyr::mutate("row_ID" = 1:nrow_smoothed_data) %>%
-    dplyr::relocate(.data$row_ID) %>%
+    dplyr::relocate("row_ID") %>%
     sf::st_as_sf() # TODO check CRS
 
   spm_smoothed_data(sspm_object) <- smoothed_data

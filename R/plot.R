@@ -6,7 +6,17 @@
 #' @param y NOT USED (from generic).
 #' @param ... NOT USED (from generic).
 #'
+#' @param line_size **\[numeric\]** Passed on to ggplot size parameter for line
+#'    size.
+#' @param point_size **\[numeric\]** Passed on to ggplot size parameter for
+#'    point size.
+#'
 #' @param var **\[character\]** (For sspm_dataset) Variable to plot.
+#'
+#' @param interval **\[logical\]** (For sspm_fit & sspm_dataset) Whether to plot
+#'    CI and PI intervals.
+#' @param show_CI **\[character\]** Whether to show the CIs.
+#' @param show_PI **\[character\]** Whether to show the PIs.
 #'
 #' @param train_test **\[logical\]** (For sspm_fit) Whether to plot a train/test
 #'    pair plot.
@@ -14,10 +24,10 @@
 #'    predictions.
 #' @param next_ts **\[logical\]** (For sspm_fit) Whether to plot a predictions
 #'    for next timestep.
+#' @param smoothed_biomass **\[logical\]** (For sspm_fit) Whether to plot a the
+#'    smoothed biomass used for predictions.
 #' @param aggregate **\[logical\]** (For sspm_fit) For biomass predictions only,
 #'    whether to aggregate the data to the boundary level. Default to FALSE.
-#' @param interval **\[logical\]** (For sspm_fit) Whether to plot CI and Pi
-#'    intervals.
 #'
 #' @param biomass_origin **\[character\]** Biomass variable to plot (from
 #'    original dataset, optionnal).
@@ -104,11 +114,15 @@ setMethod("plot",
 setMethod("plot",
           signature(x = "sspm_dataset",
                     y = "missing"),
-          definition = function(x, y, ..., var = NULL, use_sf = FALSE,
+          definition = function(x, y, ..., var = NULL,
+                                point_size = 1, line_size = 1,
+                                use_sf = FALSE, interval = FALSE,
                                 page = "first", nrow = 2, ncol = 2,
-                                log = FALSE, scales = "fixed") {
+                                log = FALSE, scales = "fixed",
+                                show_PI = TRUE, show_CI = TRUE) {
 
-            smoothed_data <- spm_smoothed_data(x)
+            smoothed_data <- predict(x, interval = interval) %>%
+              sf::st_as_sf()
 
             if (is.null(smoothed_data)){
               stop("Dataset doesn't have any smoothed data")
@@ -135,7 +149,9 @@ setMethod("plot",
                 spm_plot_routine(smoothed_data = smoothed_data, var = var,
                                  use_sf = use_sf, page = page, nrow = nrow,
                                  ncol = ncol, time_col = time_col, log = log,
-                                 scales = scales, color_profile = color_profile)
+                                 scales = scales, color_profile = color_profile,
+                                 interval = interval, point_size = point_size,
+                                 line_size = line_size)
 
               return(sspm_discrete_plot)
             }
@@ -148,11 +164,15 @@ setMethod("plot",
 setMethod("plot",
           signature(x = "sspm_fit",
                     y = "missing"),
-          definition = function(x, y, ..., train_test = FALSE, biomass = NULL,
-                                next_ts = FALSE, aggregate = FALSE,
-                                interval = FALSE, biomass_origin = NULL,
-                                use_sf = FALSE, page = "first", nrow = 2,
-                                ncol = 2, log = FALSE, scales = "fixed") {
+          definition = function(x, y, ...,
+                                point_size = 1, line_size = 1,
+                                train_test = FALSE, biomass = NULL,
+                                next_ts = FALSE, smoothed_biomass = FALSE,
+                                aggregate = FALSE, interval = FALSE,
+                                biomass_origin = NULL, use_sf = FALSE,
+                                page = "first", nrow = 2, ncol = 2,
+                                log = FALSE, scales = "fixed",
+                                show_PI = TRUE, show_CI = TRUE) {
 
             # If no biomass is provided, does a train/test plot (default)
             if (train_test){
@@ -166,7 +186,10 @@ setMethod("plot",
                 sspm_discrete_plot <- plot_biomass(x, biomass, biomass_origin,
                                                    aggregate, interval, use_sf,
                                                    page, nrow, ncol, log, scales,
-                                                   next_ts)
+                                                   next_ts, smoothed_biomass,
+                                                   point_size = point_size,
+                                                   line_size = line_size,
+                                                   show_PI = show_PI, show_CI = show_CI)
 
               } else {
 
@@ -174,7 +197,9 @@ setMethod("plot",
 
                 sspm_discrete_plot <-
                   plot_productivity(x, aggregate, interval, use_sf, page, nrow,
-                                    ncol, log, scales)
+                                    ncol, log, scales, point_size = point_size,
+                                    line_size = line_size,
+                                    show_PI = show_PI, show_CI = show_CI)
 
               }
 

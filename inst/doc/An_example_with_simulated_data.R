@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -15,7 +15,7 @@ borealis_simulated
 predator_simulated
 catch_simulated
 
-## ----boundaries---------------------------------------------------------------
+## ----boundaries, fig.width=7, fig.height=5, fig.fullwidth=TRUE, fig.align='center'----
 bounds <- spm_as_boundary(boundaries = sfa_boundaries, 
                           boundary = "sfa")
 
@@ -49,18 +49,18 @@ bounds_voronoi <- bounds %>%
 
 bounds_voronoi
 
-## ---- eval = FALSE------------------------------------------------------------
-#  ## Not run
-#  bounds_delaunay <- bounds %>%
-#    spm_discretize(method = "triangulate_delaunay", a = 1, q = 30)
-#  bounds_delaunay
+## ----eval = FALSE-------------------------------------------------------------
+# ## Not run
+# bounds_delaunay <- bounds %>%
+#   spm_discretize(method = "triangulate_delaunay", a = 1, q = 30)
+# bounds_delaunay
 
-## -----------------------------------------------------------------------------
+## ----fig.width=7, fig.height=5, fig.fullwidth=TRUE, fig.align='center'--------
 plot(bounds_voronoi)
 
-## ---- eval = FALSE------------------------------------------------------------
-#  ## Not run
-#  plot(bounds_delaunay)
+## ----eval = FALSE-------------------------------------------------------------
+# ## Not run
+# plot(bounds_delaunay)
 
 ## -----------------------------------------------------------------------------
 spm_patches(bounds_voronoi)
@@ -80,10 +80,10 @@ biomass_smooth <- biomass_dataset %>%
 
 biomass_smooth
 
-## -----------------------------------------------------------------------------
-plot(biomass_smooth, var = "weight_per_km2", log = FALSE)
+## ----fig.width=7, fig.height=5, fig.fullwidth=TRUE, fig.align='center'--------
+plot(biomass_smooth, var = "weight_per_km2", log = FALSE, interval = T)
 
-## -----------------------------------------------------------------------------
+## ----fig.width=7, fig.height=5, fig.fullwidth=TRUE, fig.align='center'--------
 plot(biomass_smooth, var = "weight_per_km2", use_sf = TRUE)
 
 ## -----------------------------------------------------------------------------
@@ -128,7 +128,7 @@ sspm_model
 
 ## -----------------------------------------------------------------------------
 sspm_model <- sspm_model %>% 
-  spm_lag(vars = c("weight_per_km2_borealis_with_catch", 
+  spm_lag(vars = c("weight_per_km2_borealis", 
                    "weight_per_km2_all_predators"), 
           n = 1)
 
@@ -138,13 +138,20 @@ sspm_model
 sspm_model_fit <- sspm_model %>% 
   spm(log_productivity ~ sfa +
         weight_per_km2_all_predators_lag_1 +
-        smooth_space(by = weight_per_km2_borealis_with_catch) +
+        smooth_space(by = weight_per_km2_borealis_lag_1) +
         smooth_space(), 
       family = mgcv::scat)
 
 sspm_model_fit
 
 ## -----------------------------------------------------------------------------
+gam_fit <- spm_get_fit(sspm_model_fit)
+summary(gam_fit)
+
+## -----------------------------------------------------------------------------
+summary(sspm_model_fit, biomass = "weight_per_km2_borealis")
+
+## ----fig.width=7, fig.height=5, fig.fullwidth=TRUE, fig.align='center'--------
 plot(sspm_model_fit, train_test = TRUE, scales = "free")
 
 ## -----------------------------------------------------------------------------
@@ -160,15 +167,16 @@ biomass_one_step <- predict(sspm_model_fit, biomass = "weight_per_km2_borealis",
                             next_ts = TRUE)
 head(biomass_one_step)
 
-## -----------------------------------------------------------------------------
+## ----fig.width=7, fig.height=5, fig.fullwidth=TRUE, fig.align='center'--------
 plot(sspm_model_fit, log = T, scales = 'free')
 plot(sspm_model_fit, log = T, use_sf = TRUE)
 
-## -----------------------------------------------------------------------------
+## ----fig.width=7, fig.height=5, fig.fullwidth=TRUE, fig.align='center'--------
 plot(sspm_model_fit, biomass = "weight_per_km2_borealis",  scales = "free")
 plot(sspm_model_fit, biomass = "weight_per_km2_borealis", use_sf = TRUE)
 
-## -----------------------------------------------------------------------------
+## ----fig.width=7, fig.height=5, fig.fullwidth=TRUE, fig.align='center'--------
 plot(sspm_model_fit, biomass = "weight_per_km2_borealis",
-     next_ts = TRUE, aggregate = TRUE, scales = "free", interval = T)
+     next_ts = TRUE, aggregate = TRUE, scales = "free", 
+     smoothed_biomass = TRUE, interval = T)
 

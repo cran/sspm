@@ -1,7 +1,8 @@
 #' Discretize a `sspm` model object
 #'
 #' Discretize a [sspm][sspm-class] model object with a function from a
-#' [discretization_method][discretization_method-class] object class.
+#' [discretization_method][discretization_method-class] object class. This
+#' function divides the boundary polygons into smaller patches.
 #'
 #' @param boundary_object **\[sspm\]** An object of class
 #'    [sspm_boundary][sspm-class].
@@ -32,8 +33,15 @@
 #'    stores the points that were used for discretization.
 #'
 #' @examples
-#' \dontrun{
 #' # Voronoi tesselation
+#' sfa_boundaries
+#' bounds <- spm_as_boundary(boundaries = sfa_boundaries,
+#'                           boundary = "sfa")
+#' biomass_dataset <- spm_as_dataset(data.frame(borealis_simulated), name = "borealis",
+#'                                   density = "weight_per_km2",
+#'                                   time = "year_f",
+#'                                   coords = c('lon_dec','lat_dec'),
+#'                                   uniqueID = "uniqueID")
 #' bounds_voronoi <- bounds %>%
 #'   spm_discretize(method = "tesselate_voronoi",
 #'                  with = biomass_dataset,
@@ -48,9 +56,6 @@
 #'   return(list(patches = c(),
 #'               points = c())
 #'          )
-#' }
-#'
-#' spm_discretize(boundary_object, method = custom_func)
 #' }
 #'
 #' @export
@@ -129,6 +134,11 @@ setMethod(f = "spm_discretize",
                     method = "discretization_method"),
           function(boundary_object, method, with, ...) {
 
+            if (checkmate::test_class(boundary_object,
+                                      "sspm_discrete_boundary")) {
+              stop(" Boundary is already discretized")
+            }
+
             if (checkmate::test_class(with, "sspm_dataset")){
               with <- spm_data(with)
             } else if (!is.null(with)) {
@@ -167,16 +177,5 @@ setMethod(f = "spm_discretize",
                   points = discrete[["points"]])
 
             return(new_sspm_discrete_boundary)
-          }
-)
-
-# RE-discretization not allowed for now
-#' @rdname spm_discretize
-#' @export
-setMethod(f = "spm_discretize",
-          signature(boundary_object = "sspm_discrete_boundary"),
-          function(boundary_object, method, with, ...) {
-
-            cli::cli_alert_danger(paste0(" Boundary is already discretized"))
           }
 )

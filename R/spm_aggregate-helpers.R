@@ -77,7 +77,7 @@ spm_aggregate_routine <- function(dataset_data, boundaries, group_by, level,
 
   # Rename before returning
   dataset_data_tmp <- dataset_data_tmp %>%
-    dplyr::rename(!!variable := .data$temp)
+    dplyr::rename(!!variable := "temp")
 
   return(dataset_data_tmp)
 

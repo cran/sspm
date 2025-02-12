@@ -5,7 +5,8 @@
 #'
 #' @param sspm_object **\[discretization_method\]** An object of class
 #'   [discretization_method][discretization_method-class].
-#'
+#' @param object **\[discretization_method\]** An object of class
+#'     [discretization_method][discretization_method-class].
 #' @inheritParams base::Extract
 #'
 #' @rdname accessors-methods-discret_method
@@ -14,10 +15,8 @@
 #' The object in the required slot.
 #'
 #' @examples
-#' \dontrun{
-#' method_func(sspm_object)
-#' ...
-#' }
+#' method <- as_discretization_method("tesselate_voronoi")
+#' method_func(method)
 
 # Function ----------------------------------------------------------------
 # Accessors ---------------------------------------------------------------

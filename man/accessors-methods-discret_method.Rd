@@ -25,9 +25,8 @@ method_func(object) <- value
 \item{sspm_object}{\strong{[discretization_method]} An object of class
 \link[=discretization_method-class]{discretization_method}.}
 
-\item{object}{
-    object from which to extract element(s) or in which to replace element(s).
-  }
+\item{object}{\strong{[discretization_method]} An object of class
+\link[=discretization_method-class]{discretization_method}.}
 
 \item{value}{typically an array-like \R object of a similar class as
     \code{x}.}
@@ -40,8 +39,6 @@ All methods described here allow to access the elements of contained in
 objects of class \link[=discretization_method-class]{discretization_method}.
 }
 \examples{
-\dontrun{
-method_func(sspm_object)
-...
-}
+method <- as_discretization_method("tesselate_voronoi")
+method_func(method)
 }

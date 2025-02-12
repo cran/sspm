@@ -32,7 +32,7 @@ predict_productivity <- function(object, new_data, type, interval){
 
   # Keep the minimum column set
   columns_to_keep <- smoothed_data %>%
-    dplyr::select(.data$patch_id, !!time_col,
+    dplyr::select("patch_id", !!time_col,
                   !!bounds_col, !!patch_area_col)
 
   # Bind and turn into sf object
@@ -84,10 +84,10 @@ predict_biomass <- function(object, new_data, biomass, next_ts,
     preds <- predict(object)
 
     preds_df <- smoothed_data %>%
-      dplyr::select(.data[[time_col]], .data$patch_id, .data[[biomass]],
-                    .data$catch_density, .data[[bounds_col]]) %>%
+      dplyr::select(dplyr::all_of(time_col), "patch_id", dplyr::all_of(biomass),
+                    "catch_density", dplyr::all_of(bounds_col)) %>%
       dplyr::left_join(sf::st_drop_geometry(preds),
-                       by = c(dplyr::all_of(c(time_col, bounds_col)), "patch_id")) %>%
+                       by = c(c(time_col, bounds_col), "patch_id")) %>%
       dplyr::group_by(.data$patch_id, .data[[bounds_col]]) %>%
 
       dplyr::mutate(biomass_density_with_catch =
@@ -97,16 +97,16 @@ predict_biomass <- function(object, new_data, biomass, next_ts,
 
       dplyr::ungroup() %>%
 
-      dplyr::select(-.data$pred, -.data$pred_log, -.data[[biomass]],
-                    -.data$catch_density) %>%
-      dplyr::relocate(.data[[patch_area_col]], .before = "geometry") %>%
+      dplyr::select(-"pred", -"pred_log", -dplyr::all_of(biomass),
+                    -"catch_density") %>%
+      dplyr::relocate(dplyr::all_of(patch_area_col), .before = "geometry") %>%
 
       dplyr::mutate(biomass_with_catch = .data$biomass_density_with_catch *
                       .data[[patch_area_col]],
                     biomass = .data$biomass_density *
                       .data[[patch_area_col]]) %>%
-      dplyr::relocate(.data$biomass_with_catch, .data$biomass,
-                      .data$biomass_density_with_catch, .data$biomass_density,
+      dplyr::relocate("biomass_with_catch", "biomass",
+                      "biomass_density_with_catch", "biomass_density",
                       .before = "geometry") %>%
       sf::st_as_sf()
 
@@ -130,10 +130,10 @@ predict_biomass <- function(object, new_data, biomass, next_ts,
       preds_df <- preds_df %>%
         dplyr::group_by(.data[[bounds_col]], .data[[time_col]]) %>%
         dplyr::summarise(biomass = sum(.data$biomass),
-                         CI_upper = sum(.data$CI_upper),
-                         CI_lower = sum(.data$CI_lower),
-                         PI_upper = sum(.data$PI_upper),
-                         PI_lower = sum(.data$PI_lower))
+                         biomass_CI_upper = sum(.data$biomass_CI_upper),
+                         biomass_CI_lower = sum(.data$biomass_CI_lower),
+                         biomass_PI_upper = sum(.data$biomass_PI_upper),
+                         biomass_PI_lower = sum(.data$biomass_PI_lower))
 
     } else {
 
@@ -199,14 +199,14 @@ predict_next_ts <- function(object, new_data, biomass){
     dplyr::mutate(density_next_ts = density_last_year * ratio_next_ts,
                   biomass = .data$density_next_ts * .data[[patch_area_col]],
                   year_f = next_ts_data$next_ts) %>%
-    dplyr::select(-.data$density_next_ts)
+    dplyr::select(-"density_next_ts")
 
   # Cosmetic changes
   preds_df <-  preds_df %>%
-    dplyr::relocate(.data$biomass) %>%
-    dplyr::relocate(.data[[bounds_col]]) %>%
-    dplyr::relocate(.data[[time_col]]) %>%
-    dplyr::relocate(.data$patch_id)
+    dplyr::relocate("biomass") %>%
+    dplyr::relocate(dplyr::all_of(bounds_col)) %>%
+    dplyr::relocate(dplyr::all_of(time_col)) %>%
+    dplyr::relocate("patch_id")
 
   return(list(preds_df = preds_df, new_data = new_data))
 
@@ -229,7 +229,7 @@ make_next_ts_data <- function(object, time_col, patches, bounds_col,
 
   # Make a new grid with the next timestep
   new_grid <- patches %>%
-    dplyr::select(.data[[bounds_col]], .data$patch_id) %>%
+    dplyr::select(dplyr::all_of(bounds_col), "patch_id") %>%
     tidyr::expand_grid(!!time_col := next_ts)
 
   # Bind the new grid to the smooth data
@@ -299,7 +299,7 @@ make_prediction_matrix <- function(the_data, time_col, patches){
   year_values <- sort(unique(year_vector))
 
   predict_mat <- patches %>%
-    sf::st_set_geometry(NULL) %>%
+    # sf::st_set_geometry(NULL) %>%
     tidyr::expand_grid(!!time_col := year_values)
 
   return(predict_mat)

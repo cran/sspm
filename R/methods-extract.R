@@ -9,18 +9,19 @@
 #' The `data.frame` matching the request.
 #'
 #' @examples
-#' \dontrun{
-#' sspm_boundary$lat
-#' sspm_dataset$biomass
-#' }
+#' sfa_boundaries
+#' bounds <- spm_as_boundary(boundaries = sfa_boundaries,
+#'                           boundary = "sfa")
+#' bounds$area_sfa
 #'
 #' @export
+#' @aliases extract
 #' @rdname extract-methods
 setMethod("$",
           "sspm_boundary",
           function(x, name) {
             x@boundaries %>%
-              dplyr::select(c(name, spm_boundary(x), "geometry"))
+              dplyr::select(c(dplyr::all_of(name), spm_boundary(x), "geometry"))
           }
 )
 
@@ -30,7 +31,7 @@ setMethod("$",
           "sspm_discrete_boundary",
           function(x, name) {
             x@boundaries %>%
-              dplyr::select(c(name, spm_boundary(x), "geometry"))
+              dplyr::select(c(dplyr::all_of(name), spm_boundary(x), "geometry"))
           }
 )
 
@@ -41,10 +42,10 @@ setMethod("$",
           function(x, name) {
             if (is.null(x@smoothed_data)) {
               x@data %>%
-                dplyr::select(c(name, spm_time(x), "geometry"))
+                dplyr::select(c(dplyr::all_of(name), spm_time(x), "geometry"))
             } else {
               x@smoothed_data %>%
-                dplyr::select(c(name, spm_time(x), "geometry"))
+                dplyr::select(c(dplyr::all_of(name), spm_time(x), "geometry"))
             }
           }
 )
@@ -56,25 +57,10 @@ setMethod("$",
           function(x, name) {
             if (is.null(x@smoothed_data)) {
               x@data %>%
-                dplyr::select(c(name, spm_time(x), "geometry"))
+                dplyr::select(c(dplyr::all_of(name), spm_time(x), "geometry"))
             } else {
               x@smoothed_data %>%
-                dplyr::select(c(name, spm_time(x), "geometry"))
-            }
-          }
-)
-
-#' @export
-#' @rdname extract-methods
-setMethod("$",
-          "sspm_fit",
-          function(x, name) {
-            if (is.null(x@smoothed_data)) {
-              x@data %>%
-                dplyr::select(c(name, spm_time(x), "geometry"))
-            } else {
-              x@smoothed_data %>%
-                dplyr::select(c(name, spm_time(x), "geometry"))
+                dplyr::select(c(dplyr::all_of(name), spm_time(x), "geometry"))
             }
           }
 )

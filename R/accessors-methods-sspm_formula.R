@@ -5,7 +5,8 @@
 #'
 #' @param sspm_object **\[sspm_formula\]** An object of class
 #'     [sspm_formula][sspm_formula-class].
-#'
+#' @param object **\[sspm_formula\]** An object of class
+#'     [sspm_formula][sspm_formula-class].
 #' @inheritParams base::Extract
 #'
 #' @rdname accessors-methods-sspm_formula
@@ -14,10 +15,14 @@
 #' The object in the required slot.
 #'
 #' @examples
-#' \dontrun{
-#' translated_formula(sspm_object)
-#' ...
-#' }
+#' form <- new("sspm_formula",
+#'             raw_formula = as.formula("weight_per_km2 ~ smooth_time()"),
+#'             translated_formula = as.formula("weight_per_km2 ~ s(year_f,
+#'                       k = 24L, bs = 're', xt = list(penalty = pen_mat_time))"),
+#'                     vars = list(pen_mat_time = matrix(),
+#'                                 pen_mat_space = matrix()),
+#'                     response = "weight_per_km2")
+#' translated_formula(form)
 
 # Raw formula -------------------------------------------------------------
 # Accessors ---------------------------------------------------------------
@@ -83,41 +88,6 @@ setMethod("translated_formula<-",
           signature("object" = "sspm_formula"),
           function(object, value) {
             object@translated_formula <- value
-            validObject(object)
-            return(object)
-          }
-)
-
-# Dataset -----------------------------------------------------------------
-# Accessors ---------------------------------------------------------------
-
-#' @rdname accessors-methods-sspm_formula
-#' @export
-setGeneric(name = "dataset",
-           def = function(sspm_object) standardGeneric("dataset")
-)
-
-#' @rdname accessors-methods-sspm_formula
-#' @export
-setMethod("dataset",
-          signature("sspm_object" = "sspm_formula"),
-          function(sspm_object) sspm_object@dataset
-)
-
-# Replacers ---------------------------------------------------------------
-
-#' @rdname accessors-methods-sspm_formula
-#' @export
-setGeneric(name = "dataset<-",
-           def = function(object, value) standardGeneric("dataset<-")
-)
-
-#' @rdname accessors-methods-sspm_formula
-#' @export
-setMethod("dataset<-",
-          signature("object" = "sspm_formula"),
-          function(object, value) {
-            object@dataset <- value
             validObject(object)
             return(object)
           }

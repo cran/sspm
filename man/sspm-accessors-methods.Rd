@@ -86,9 +86,8 @@ spm_unique_ID(object) <- value
 \item{sspm_object}{\strong{[sspm OR adjacent]} An object of class
 \link[=sspm-class]{sspm} or others derivative classes.}
 
-\item{object}{
-    object from which to extract element(s) or in which to replace element(s).
-  }
+\item{object}{\strong{[sspm OR adjacent]} An object of class
+\link[=sspm-class]{sspm} or others derivative classes.}
 
 \item{value}{typically an array-like \R object of a similar class as
     \code{x}.}
@@ -101,8 +100,11 @@ All methods described here allow to access the elements of contained in
 objects of the different classes of the package.
 }
 \examples{
-\dontrun{
-spm_name(sspm_object)
-...
-}
+data(borealis_simulated, package = "sspm")
+biomass_dataset <- spm_as_dataset(data.frame(borealis_simulated), name = "borealis",
+                                  density = "weight_per_km2",
+                                  time = "year_f",
+                                  coords = c('lon_dec','lat_dec'),
+                                  uniqueID = "uniqueID")
+spm_name(biomass_dataset)
 }

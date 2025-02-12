@@ -12,11 +12,14 @@
 #' @return
 #' A object of the class [`sspm_fit`][sspm_fit-class].
 #'
-# Examples
-# \dontrun{
-# fit_smooths(boundaries = boundaries, keep_fit = TRUE, ...)
-# fit_spm(sspm_object = sspm_object, sspm_formula = sspm_formula, ...)
-# }
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{
+#' fit_smooths(boundaries = boundaries, keep_fit = TRUE, ...)
+#' fit_spm(sspm_object = sspm_object, sspm_formula = sspm_formula, ...)
+#' }
+
 #' @rdname fit
 setGeneric(name = "fit_smooths",
            def = function(sspm_object,
@@ -48,6 +51,7 @@ setGeneric(name = "fit_spm",
 # Methods -----------------------------------------------------------------
 
 #' @rdname fit
+#' @keywords internal
 setMethod(f = "fit_smooths",
           signature(sspm_object = "sspm_dataset",
                     boundaries = "sspm_discrete_boundary"),
@@ -119,7 +123,7 @@ setMethod(f = "fit_smooths",
                           ...)
               }, error = function(e) {
 
-                # CAtch potential issue with by variables
+                # Catch potential issue with by variables
                 if (e$message == "Can't find by variable") {
                   cli::cli_alert_danger(" mgcv failed to fit 'by' smooths")
                   cli::cli_alert_info(" Please ensure that all 'by = ...' variables are encoded as factors")

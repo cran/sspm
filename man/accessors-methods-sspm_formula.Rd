@@ -9,10 +9,6 @@
 \alias{translated_formula,sspm_formula-method}
 \alias{translated_formula<-}
 \alias{translated_formula<-,sspm_formula-method}
-\alias{dataset}
-\alias{dataset,sspm_formula-method}
-\alias{dataset<-}
-\alias{dataset<-,sspm_formula-method}
 \alias{formula_vars}
 \alias{formula_vars,sspm_formula-method}
 \alias{formula_vars<-}
@@ -50,14 +46,6 @@ translated_formula(sspm_object)
 translated_formula(object) <- value
 
 \S4method{translated_formula}{sspm_formula}(object) <- value
-
-dataset(sspm_object)
-
-\S4method{dataset}{sspm_formula}(sspm_object)
-
-dataset(object) <- value
-
-\S4method{dataset}{sspm_formula}(object) <- value
 
 formula_vars(sspm_object)
 
@@ -103,9 +91,8 @@ spm_lagged_vars(object) <- value
 \item{sspm_object}{\strong{[sspm_formula]} An object of class
 \link[=sspm_formula-class]{sspm_formula}.}
 
-\item{object}{
-    object from which to extract element(s) or in which to replace element(s).
-  }
+\item{object}{\strong{[sspm_formula]} An object of class
+\link[=sspm_formula-class]{sspm_formula}.}
 
 \item{value}{typically an array-like \R object of a similar class as
     \code{x}.}
@@ -118,8 +105,12 @@ All methods described here allow to access the elements of contained in
 objects of class \link[=sspm_formula-class]{sspm_formula}.
 }
 \examples{
-\dontrun{
-translated_formula(sspm_object)
-...
-}
+form <- new("sspm_formula",
+            raw_formula = as.formula("weight_per_km2 ~ smooth_time()"),
+            translated_formula = as.formula("weight_per_km2 ~ s(year_f,
+                      k = 24L, bs = 're', xt = list(penalty = pen_mat_time))"),
+                    vars = list(pen_mat_time = matrix(),
+                                pen_mat_space = matrix()),
+                    response = "weight_per_km2")
+translated_formula(form)
 }

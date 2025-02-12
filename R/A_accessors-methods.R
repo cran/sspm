@@ -5,6 +5,8 @@
 #'
 #' @param sspm_object **\[sspm OR adjacent\]** An object of class
 #'     [sspm][sspm-class] or others derivative classes.
+#' @param object **\[sspm OR adjacent\]** An object of class
+#'     [sspm][sspm-class] or others derivative classes.
 #' @inheritParams base::Extract
 #' @inheritParams spm_as_dataset
 #'
@@ -15,10 +17,13 @@
 #' The object in the required slot.
 #'
 #' @examples
-#' \dontrun{
-#' spm_name(sspm_object)
-#' ...
-#' }
+#' data(borealis_simulated, package = "sspm")
+#' biomass_dataset <- spm_as_dataset(data.frame(borealis_simulated), name = "borealis",
+#'                                   density = "weight_per_km2",
+#'                                   time = "year_f",
+#'                                   coords = c('lon_dec','lat_dec'),
+#'                                   uniqueID = "uniqueID")
+#' spm_name(biomass_dataset)
 
 # Name --------------------------------------------------------------------
 # Accessors ---------------------------------------------------------------

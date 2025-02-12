@@ -55,9 +55,8 @@ spm_get_fit(object) <- value
 \item{sspm_object}{\strong{[sspm_fit]} An object of class
 \link[=sspm_fit-class]{sspm_fit}.}
 
-\item{object}{
-    object from which to extract element(s) or in which to replace element(s).
-  }
+\item{object}{\strong{[sspm_fit]} An object of class
+\link[=sspm_fit-class]{sspm_fit}.}
 
 \item{value}{typically an array-like \R object of a similar class as
     \code{x}.}
@@ -70,8 +69,11 @@ All methods described here allow to access the elements of contained in
 objects of class \link[=sspm_fit-class]{sspm_fit}.
 }
 \examples{
-\dontrun{
-spm_formulas(sspm_object)
-...
-}
+data(borealis_simulated, package = "sspm")
+biomass_dataset <- spm_as_dataset(data.frame(borealis_simulated), name = "borealis",
+                                  density = "weight_per_km2",
+                                  time = "year_f",
+                                  coords = c('lon_dec','lat_dec'),
+                                  uniqueID = "uniqueID")
+spm_formulas(biomass_dataset)
 }

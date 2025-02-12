@@ -7,7 +7,6 @@
 \alias{spm_discretize,sspm_boundary,character,ANY-method}
 \alias{spm_discretize,sspm_boundary,function,ANY-method}
 \alias{spm_discretize,sspm_boundary,discretization_method,ANY-method}
-\alias{spm_discretize,sspm_discrete_boundary,ANY,ANY-method}
 \title{Discretize a \code{sspm} model object}
 \usage{
 spm_discretize(boundary_object, method = "tesselate_voronoi", with = NULL, ...)
@@ -18,11 +17,9 @@ spm_discretize(boundary_object, method = "tesselate_voronoi", with = NULL, ...)
 
 \S4method{spm_discretize}{sspm_boundary,character,ANY}(boundary_object, method = "tesselate_voronoi", with = NULL, ...)
 
-\S4method{spm_discretize}{sspm_boundary,`function`,ANY}(boundary_object, method = "tesselate_voronoi", with = NULL, ...)
+\S4method{spm_discretize}{sspm_boundary,function,ANY}(boundary_object, method = "tesselate_voronoi", with = NULL, ...)
 
 \S4method{spm_discretize}{sspm_boundary,discretization_method,ANY}(boundary_object, method = "tesselate_voronoi", with = NULL, ...)
-
-\S4method{spm_discretize}{sspm_discrete_boundary,ANY,ANY}(boundary_object, method = "tesselate_voronoi", with = NULL, ...)
 }
 \arguments{
 \item{boundary_object}{\strong{[sspm]} An object of class
@@ -45,7 +42,8 @@ and discretized \code{sspm} object given as input).
 }
 \description{
 Discretize a \link[=sspm-class]{sspm} model object with a function from a
-\link[=discretization_method-class]{discretization_method} object class.
+\link[=discretization_method-class]{discretization_method} object class. This
+function divides the boundary polygons into smaller patches.
 }
 \details{
 Custom discretization functions can be written. The function must:
@@ -61,8 +59,15 @@ stores the points that were used for discretization.
 }
 }
 \examples{
-\dontrun{
 # Voronoi tesselation
+sfa_boundaries
+bounds <- spm_as_boundary(boundaries = sfa_boundaries,
+                          boundary = "sfa")
+biomass_dataset <- spm_as_dataset(data.frame(borealis_simulated), name = "borealis",
+                                  density = "weight_per_km2",
+                                  time = "year_f",
+                                  coords = c('lon_dec','lat_dec'),
+                                  uniqueID = "uniqueID")
 bounds_voronoi <- bounds \%>\%
   spm_discretize(method = "tesselate_voronoi",
                  with = biomass_dataset,
@@ -77,9 +82,6 @@ custom_func <- function(boundaries, ...){
   return(list(patches = c(),
               points = c())
          )
-}
-
-spm_discretize(boundary_object, method = custom_func)
 }
 
 }

@@ -82,7 +82,7 @@ latitude of the observations.}
 
 \item{...}{Arguments passed onto methods.}
 
-\item{crs}{Coordinate reference system, passed onto \link[=sf]{st_as_sf}.}
+\item{crs}{Coordinate reference system, passed onto \link[sf]{st_as_sf}.}
 
 \item{boundaries}{\strong{[sspm_boundary]} An object of class
 \link[=sspm_boundary-class]{sspm_discrete_boundary}.}
@@ -100,11 +100,12 @@ An object of class \code{\link[=sspm_dataset-class]{sspm_dataset}}.
 }
 \description{
 This casts a \code{data.frame} or \code{sf} object into  an object of class
-\code{\link[=sspm_dataset-class]{sspm_dataset}}.
+\code{\link[=sspm_dataset-class]{sspm_dataset}}. This object is the format the package
+uses to manage and manipulate the modeling data.
 }
 \examples{
 data(borealis_simulated, package = "sspm")
-biomass_dataset <- spm_as_dataset(borealis_simulated, name = "borealis",
+biomass_dataset <- spm_as_dataset(data.frame(borealis_simulated), name = "borealis",
                                   density = "weight_per_km2",
                                   time = "year_f",
                                   coords = c('lon_dec','lat_dec'),
