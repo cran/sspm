@@ -1,7 +1,7 @@
-5fb2222ce2a04d4c9284d77664271ff8 *DESCRIPTION
+c5515f000e233b7a657d51f9bcc88e94 *DESCRIPTION
 c5e9bdf3c24063c995746c35d0e889eb *LICENSE
 6017c59f0039b625c41ab25ab1375e47 *NAMESPACE
-d381d750e24072c43d89008746aa0196 *NEWS.md
+5a075dac596c8a42b6d7fe0c5a6209c1 *NEWS.md
 9489a56a75df21035fd79275810619f5 *R/AAA_S4_all_classes_definitions.R
 ebc59361162ee3c32531543c665fa418 *R/A_accessors-methods.R
 93e5909f00cf3f3c7a2626c368266dca *R/A_helpers.R
@@ -44,14 +44,14 @@ f783147747859a2448bacb044595b6f8 *R/summary.R
 78bb97df62d20a741e280656c7202a71 *R/units.R
 9a5b2f3b465bd6609158c704cef0d497 *R/utils-pipe.R
 c539e626e15c274c3898a21896618889 *README.md
-3cc63000e3aff053b90e36f4d193209a *build/vignette.rds
+bae1445be30a7822c0db22dd8402ae74 *build/vignette.rds
 396465ca1b1a9173807e75bc55e23eb8 *data/borealis_simulated.rda
 4b4339f033641594e4f578e481d9a681 *data/catch_simulated.rda
 ff7309df65f5ab21ae295c6c555c13fe *data/predator_simulated.rda
 e552e6907249def525c99dfdf78f02bd *data/sfa_boundaries.rda
 ae9b39cd6c94dc726f531b2cee4e8c92 *inst/doc/An_example_with_simulated_data.R
 3232a66cf8513b1ef543053016ed47fc *inst/doc/An_example_with_simulated_data.Rmd
-11423f935df9ed3963fab5ffcfe8081b *inst/doc/An_example_with_simulated_data.html
+38b9b87f840869fc5baa242b19f923ea *inst/doc/An_example_with_simulated_data.html
 5e270ae6034b339c2a13d20a5f7d2dec *inst/doc/Package_and_workflow_design.R
 8bcf602ea51f47f57039f3d3c1ed3151 *inst/doc/Package_and_workflow_design.Rmd
 3d7b23612a503a5d484c745962cde604 *inst/doc/Package_and_workflow_design.html
@@ -109,7 +109,7 @@ cf378d7ebe03e0943f63821ae7505dd6 *tests/testthat/test-aggregate.R
 f66252d609aa029c76cacc841857b1cf *tests/testthat/test-as-methods.R
 79d5c020ca8d37f8daee5b3776430762 *tests/testthat/test-discretize.R
 9efddbc314f64e4a3ebeddbd9d1579b0 *tests/testthat/test-extracts.R
-007085998cc7b3f2cd26b04c91a6a062 *tests/testthat/test-fit.R
+ee01a7feed39bfe4a7869afe41f8684b *tests/testthat/test-fit.R
 f8bcfd668087c041308a20f46d16643e *tests/testthat/test-help-funcs.R
 45860817a1a86ef1a3cef8680cc9c467 *tests/testthat/test-replacers.R
 b1337cfdada138c09a6ebe7f1d74158b *tests/testthat/test-show.R
